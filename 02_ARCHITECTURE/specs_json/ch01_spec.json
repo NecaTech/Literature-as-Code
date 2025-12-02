@@ -1,0 +1,29 @@
+{
+  "spec_version": "1.0",
+  "chapter_id": "ch01",
+  "title": "The Awakening",
+  "act": "1_thesis",
+  "beat": "Opening Image",
+  "narrative_goal": "Establish the protagonist's ordinary world and the flaw in their life.",
+  "emotional_beat": "Stagnation / Hidden Despair",
+  "settings": [
+    {
+      "location_id": "loc_apartment_01",
+      "sensory_focus": "The smell of stale coffee and rain."
+    }
+  ],
+  "required_characters": [
+    "char_protagonist",
+    "char_neighbor_bob"
+  ],
+  "plot_points": [
+    "Protagonist wakes up late.",
+    "Receives a mysterious letter.",
+    "Ignores the letter to go to work."
+  ],
+  "constraints": {
+    "max_tokens": 2000,
+    "pov": "Third Person Limited",
+    "tense": "Past"
+  }
+}
