@@ -1,0 +1,34 @@
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+env/
+venv/
+ENV/
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Build artifacts
+05_BUILD/logs/*.txt
+05_BUILD/exports/*
+!05_BUILD/logs/.gitkeep
+!05_BUILD/exports/.gitkeep
+
+# Temporary files
+*.tmp
+*.bak
+~*
+
+# Local configuration
+.env
+config.local.yaml
