@@ -1,0 +1,26 @@
+{
+  "rule_id": "LINT_001",
+  "name": "Show Don't Tell",
+  "description": "Detects words that describe emotions or internal states directly instead of showing them through action.",
+  "severity": "warning",
+  "patterns": [
+    "felt",
+    "seemed",
+    "realized",
+    "thought",
+    "wondered",
+    "knew",
+    "decided",
+    "noticed",
+    "heard",
+    "saw",
+    "smelled",
+    "tasted",
+    "touched",
+    "was sad",
+    "was happy",
+    "was angry",
+    "was scared"
+  ],
+  "message": "Avoid filtering the experience through the character's senses or naming the emotion directly. Describe the physical sensation or action instead."
+}

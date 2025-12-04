@@ -1,0 +1,13 @@
+{
+  "rule_id": "LINT_003",
+  "name": "Pacing Check",
+  "description": "Analyzes paragraph length to ensure variety and appropriate pacing.",
+  "severity": "warning",
+  "thresholds": {
+    "max_consecutive_long_paragraphs": 3,
+    "long_paragraph_word_count": 100,
+    "max_consecutive_short_paragraphs": 5,
+    "short_paragraph_word_count": 20
+  },
+  "message": "Monotonous pacing detected. Vary paragraph lengths to control the reading speed."
+}
