@@ -13,7 +13,7 @@ Le framework fonctionne comme un pipeline de données. Vous injectez des spécif
 flowchart LR
     subgraph INPUT ["1. ENTRÉES (Ce que vous écrivez)"]
         direction TB
-        Project[00_PROJECT\n(Intentions)]
+        Project[00_SPECS\n(Concept/Casting/Design)]
         Context[01_CONTEXT_DB\n(Fiches Persos/Lieux)]
         Spec[02_STRUCTURE\n(Specs Chapitres)]
     end
@@ -44,16 +44,16 @@ flowchart LR
 
 Voici les procédures standard pour utiliser le framework.
 
-### UC-01 : Initialiser un Nouveau Projet
-**Acteur** : Auteur
-**But** : Définir les fondations du roman.
+### UC-01 : Conception (Phase Spec-First)
+**Acteurs** : Architecte + Critique
+**But** : Définir les fondations AVANT de construire.
 
-1.  **Naviguer** vers `00_PROJECT/`.
-2.  **Créer** un fichier `manifesto.md` (ou utiliser `project_alpha.md`).
-3.  **Remplir** les métadonnées :
-    *   *Genre*
-    *   *Public Cible*
-    *   *Controlling Idea* (Thème central)
+1.  **Naviguer** vers `00_SPECS/`.
+2.  **Remplir** les 3 templates fondamentaux :
+    *   `01_concept.md` : La graine (Genre, Thème, Règles).
+    *   `02_casting.md` : Les acteurs (Ghost, Lie, Truth).
+    *   `03_story_design.md` : Le plan (15 Beats Save The Cat).
+3.  **Vérifier** la cohérence : Le Critique doit valider que le *Casting* peut porter le *Design*.
 
 ### UC-02 : Créer une Entité (Personnage/Lieu)
 **Acteur** : Auteur
@@ -108,3 +108,20 @@ Voici les procédures standard pour utiliser le framework.
 *   **Draft** : Le brouillon brut généré par l'IA.
 *   **Staging** : Le brouillon relu et corrigé par l'humain.
 *   **Master** : La version finale, canonique.
+
+---
+
+## 🤝 Workflow de Contribution (Knowledge First)
+
+Ce framework est conçu pour évoluer. Chaque roman que vous écrivez est une occasion d'enrichir le système.
+
+### Le Principe "Private Novel, Public Knowledge"
+*   ⛔ **IGNORÉ (Privé)** : Vos romans, personnages et brouillons (`00_SPECS`, `01_CONTEXT_DB`, `03_MANUSCRIPT`, `05_BUILD`). Ils restent sur votre machine.
+*   ✅ **TRAQUÉ (Partagé)** : La documentation, les tests et le moteur (`docs/`, `04_TESTS`, `_SYSTEM`).
+
+### Comment contribuer ?
+1.  **Vous découvrez une astuce** (ex: "Comment gérer un dialogue à 3 persos").
+2.  **Créez** un fichier Markdown dans `docs/best_practices/` (ex: `dialogue_trio.md`).
+3.  **Commitez et Pushez** ce fichier.
+4.  Votre connaissance est désormais sauvegardée et disponible pour vos futurs clones du framework !
+

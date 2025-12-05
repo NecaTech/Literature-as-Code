@@ -1,34 +1,40 @@
-# Python
+# --- KNOWLEDGE FIRST STRATEGY ---
+# We ignore the specific implementation (Novel) but track the Framework (Engine, Docs, Tests).
+
+# 1. IGNORE CREATIVE CONTENT
+# --------------------------
+# Exclude the actual novel text and data
+00_SPECS/*
+01_CONTEXT_DB/*
+02_STRUCTURE/*
+03_MANUSCRIPT/*
+
+# 2. BUT KEEP THE STRUCTURE
+# -------------------------
+# We want these folders to exist in the repo, just empty of content
+!00_SPECS/.gitkeep
+!00_SPECS/.system/
+!01_CONTEXT_DB/.gitkeep
+!02_STRUCTURE/.gitkeep
+!03_MANUSCRIPT/.gitkeep
+
+# 3. BUILD ARTIFACTS
+# ------------------
+# Ignore generated reports and exports
+05_BUILD/*
+!05_BUILD/.gitkeep
+
+# 4. PYTHON & ENV
+# ---------------
 __pycache__/
 *.py[cod]
-*$py.class
-*.so
-.Python
-env/
+.env
 venv/
-ENV/
+env/
 
-# IDE
-.vscode/
-.idea/
-*.swp
-*.swo
-
-# OS
+# 5. OS & IDE
+# -----------
 .DS_Store
 Thumbs.db
-
-# Build artifacts
-05_BUILD/logs/*.txt
-05_BUILD/exports/*
-!05_BUILD/logs/.gitkeep
-!05_BUILD/exports/.gitkeep
-
-# Temporary files
-*.tmp
-*.bak
-~*
-
-# Local configuration
-.env
-config.local.yaml
+.vscode/
+.idea/
