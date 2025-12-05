@@ -10,15 +10,15 @@ Transformer la matière brute (idées, trames, notes) en un roman structuré et 
 ## 📋 Workflow de Production
 
 ### ÉTAPE 1 : INTAKE (Réception de la Demande)
-**Localisation** : `00_PROJECT/` (Cahier Des Charges)
+**Localisation** : `00_SPECS/` (Spécifications du Projet)
 
 **Action** :
-1. Scanne le dossier `00_PROJECT/` pour identifier les nouveaux projets
+1. Scanne le dossier `00_SPECS/` pour identifier les spécifications du projet
 2. Lis TOUS les fichiers présents :
-   - `brief.md` : Demande principale de l'utilisateur
-   - `ideas.md` : Idées en vrac, fragments
-   - `references.md` : Inspirations, tonalités souhaitées
-   - Tout autre fichier texte/markdown
+   - `01_concept.md` : Concept, genre, thème, règles du monde
+   - `02_casting.md` : Personnages principaux (Ghost/Lie/Truth)
+   - `03_story_design.md` : Structure narrative (15 Beats Save The Cat)
+   - Tout autre fichier texte/markdown dans `.system/`
 
 **Output** : Une compréhension claire de ce que l'utilisateur veut.
 
@@ -151,7 +151,7 @@ Avant CHAQUE session de rédaction, relis mentalement :
 
 Demande validation humaine dans ces cas :
 - **Choix narratif majeur** : Mort d'un personnage, twist majeur
-- **Ambiguïté dans le 00_PROJECT** : Si la demande initiale est floue
+- **Ambiguïté dans les 00_SPECS** : Si les spécifications initiales sont floues
 - **Conflit entre specs** : Si deux contraintes sont incompatibles
 - **Blocage créatif** : Si tu ne sais pas comment résoudre un problème narratif
 
