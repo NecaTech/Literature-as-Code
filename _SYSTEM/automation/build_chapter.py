@@ -41,7 +41,7 @@ def mock_llm_generate(system_prompt: str, user_prompt: str) -> str:
 def save_draft(chapter_id: str, content: str, version: str = "v0") -> Path:
     """Saves the generated draft to disk."""
     filename = f"{chapter_id}_{version}.md"
-    output_dir = PROJECT_ROOT / "03_SOURCE/01_drafts"
+    output_dir = PROJECT_ROOT / "03_MANUSCRIPT/01_drafts"
     output_dir.mkdir(parents=True, exist_ok=True)
     
     output_path = output_dir / filename
@@ -66,7 +66,7 @@ def save_report(chapter_id: str, report: dict, version: str = "v0") -> Path:
 
 def load_system_prompt(prompt_name: str) -> str:
     """Loads a system prompt from the prompts directory."""
-    path = PROJECT_ROOT / "00_SYSTEM/prompts" / prompt_name
+    path = PROJECT_ROOT / "_SYSTEM/prompts" / prompt_name
     if not path.exists():
         print(f"⚠ Warning: System prompt not found: {path}")
         return ""
@@ -77,7 +77,7 @@ def run_pipeline(chapter_id: str, dry_run: bool = False):
     print(f"Starting build for Chapter {chapter_id}...")
     
     # 1. Locate Spec
-    spec_path = f"02_ARCHITECTURE/specs_json/{chapter_id}_spec.json"
+    spec_path = f"02_STRUCTURE/specs_json/{chapter_id}_spec.json"
     
     try:
         # 2. Load Context

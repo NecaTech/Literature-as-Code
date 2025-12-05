@@ -172,7 +172,7 @@ def run(spec_path: str, output_file: Optional[str] = None) -> str:
 if __name__ == "__main__":
     # Example usage
     result = run(
-        "02_ARCHITECTURE/specs_json/ch01_spec.json",
+        "02_STRUCTURE/specs_json/ch01_spec.json",
         "05_BUILD/logs/ch01_context.txt"
     )
     print("\nContext assembly complete.")

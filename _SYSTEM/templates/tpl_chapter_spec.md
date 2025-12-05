@@ -5,8 +5,8 @@ act:
 required_context:
   - path: "01_CONTEXT_DB/characters/hero.md"
   - path: "01_CONTEXT_DB/world/location_city.md"
-  - path: "02_ARCHITECTURE/global_story_map.md"
-prev_chapter_summary: "03_SOURCE/02_staging/chXX_summary.md"
+  - path: "02_STRUCTURE/global_story_map.md"
+prev_chapter_summary: "03_MANUSCRIPT/02_staging/chXX_summary.md"
 ---
 
 # SPÉCIFICATION FONCTIONNELLE : [TITRE DU CHAPITRE]

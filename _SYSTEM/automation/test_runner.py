@@ -105,12 +105,12 @@ def evaluate_draft(draft_text: str, spec: Dict) -> Dict:
     print("="*40)
     
     # 1. Linting
-    rules_dir = PROJECT_ROOT / "04_TEST_SUITE/linting_rules"
+    rules_dir = PROJECT_ROOT / "04_TESTS/linting_rules"
     rules = load_linting_rules(rules_dir)
     lint_report = run_linting(draft_text, rules)
     
     # 2. Unit Tests
-    tests_dir = PROJECT_ROOT / "04_TEST_SUITE/unit_tests"
+    tests_dir = PROJECT_ROOT / "04_TESTS/unit_tests"
     unit_test_report = run_unit_tests(draft_text, spec, tests_dir)
     
     # 3. Aggregate Results

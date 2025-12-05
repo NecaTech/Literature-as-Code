@@ -10,10 +10,10 @@ Transformer la matière brute (idées, trames, notes) en un roman structuré et 
 ## 📋 Workflow de Production
 
 ### ÉTAPE 1 : INTAKE (Réception de la Demande)
-**Localisation** : `CDC/` (Cahier Des Charges)
+**Localisation** : `00_PROJECT/` (Cahier Des Charges)
 
 **Action** :
-1. Scanne le dossier `CDC/` pour identifier les nouveaux projets
+1. Scanne le dossier `00_PROJECT/` pour identifier les nouveaux projets
 2. Lis TOUS les fichiers présents :
    - `brief.md` : Demande principale de l'utilisateur
    - `ideas.md` : Idées en vrac, fragments
@@ -25,7 +25,7 @@ Transformer la matière brute (idées, trames, notes) en un roman structuré et 
 ---
 
 ### ÉTAPE 2 : PLANNING (Conception de l'Architecture)
-**Localisation** : `02_ARCHITECTURE/`
+**Localisation** : `02_STRUCTURE/`
 
 **Action** :
 1. **Définis le Thème Central** :
@@ -34,10 +34,10 @@ Transformer la matière brute (idées, trames, notes) en un roman structuré et 
 
 2. **Choisis la Structure** :
    - Utilise `docs/expert_narratology/structure_save_the_cat.md` comme référence
-   - Définis les 15 Beats dans `02_ARCHITECTURE/global_story_map.md`
+   - Définis les 15 Beats dans `02_STRUCTURE/global_story_map.md`
 
 3. **Crée les Specs JSON** :
-   - Pour chaque chapitre clé, génère un fichier dans `02_ARCHITECTURE/specs_json/`
+   - Pour chaque chapitre clé, génère un fichier dans `02_STRUCTURE/specs_json/`
    - Utilise le template de `ch01_spec.json` comme modèle
 
 **Output** : Un plan structuré de l'histoire.
@@ -50,7 +50,7 @@ Transformer la matière brute (idées, trames, notes) en un roman structuré et 
 **Action** :
 1. **Personnages** :
    - Pour chaque personnage important, crée un fichier `01_CONTEXT_DB/characters/char_{nom}.md`
-   - Utilise le template `00_SYSTEM/templates/tpl_character.md`
+   - Utilise le template `_SYSTEM/templates/tpl_character.md`
    - **CRITIQUE** : Définis Ghost / Lie / Truth pour chaque protagoniste
 
 2. **Lieux** :
@@ -66,11 +66,11 @@ Transformer la matière brute (idées, trames, notes) en un roman structuré et 
 ---
 
 ### ÉTAPE 4 : DRAFTING (Génération du Texte)
-**Localisation** : `03_SOURCE/01_drafts/`
+**Localisation** : `03_MANUSCRIPT/01_drafts/`
 
 **Action** :
 1. **Avant de rédiger** :
-   - Utilise `python 00_SYSTEM/automation/context_assembler.py` pour charger le contexte (si Python disponible)
+   - Utilise `python _SYSTEM/automation/context_assembler.py` pour charger le contexte (si Python disponible)
    - Sinon, charge MANUELLEMENT les fichiers référencés dans le spec JSON
 
 2. **Pendant la rédaction** :
@@ -81,7 +81,7 @@ Transformer la matière brute (idées, trames, notes) en un roman structuré et 
      - Tchekhov's Gun
 
 3. **Sauvegarde** :
-   - Nomme le fichier : `03_SOURCE/01_drafts/ch{XX}_v0.md`
+   - Nomme le fichier : `03_MANUSCRIPT/01_drafts/ch{XX}_v0.md`
 
 **Output** : Un premier jet brut.
 
@@ -92,7 +92,7 @@ Transformer la matière brute (idées, trames, notes) en un roman structuré et 
 
 **Action** :
 1. **Auto-Critique** :
-   - Lis les fichiers de `04_TEST_SUITE/linting_rules/` (s'ils existent)
+   - Lis les fichiers de `04_TESTS/linting_rules/` (s'ils existent)
    - Vérifie :
      - La cohérence avec les fiches personnages
      - L'absence d'exposition verbale (PP-02)
@@ -107,12 +107,12 @@ Transformer la matière brute (idées, trames, notes) en un roman structuré et 
 ---
 
 ### ÉTAPE 6 : REFACTORING (Polissage)
-**Localisation** : `03_SOURCE/02_staging/`
+**Localisation** : `03_MANUSCRIPT/02_staging/`
 
 **Action** :
 1. Applique les corrections identifiées
 2. Augmente la version : `ch{XX}_v1.md`
-3. Si validé par l'humain, promouvoir vers `03_SOURCE/03_master/`
+3. Si validé par l'humain, promouvoir vers `03_MANUSCRIPT/03_master/`
 
 **Output** : Version finale du chapitre.
 
@@ -143,7 +143,7 @@ Avant CHAQUE session de rédaction, relis mentalement :
 1. `docs/expert_narratology/structure_save_the_cat.md` - La structure
 2. `docs/best_practices/show_dont_tell.md` - Le style
 3. `docs/best_practices/dialogue_rules.md` - Les dialogues
-4. `00_SYSTEM/R_AND_D/pain_points/` - Les pièges à éviter
+4. `docs/best_practices/` - Les pièges à éviter
 
 ---
 
@@ -151,7 +151,7 @@ Avant CHAQUE session de rédaction, relis mentalement :
 
 Demande validation humaine dans ces cas :
 - **Choix narratif majeur** : Mort d'un personnage, twist majeur
-- **Ambiguïté dans le CDC** : Si la demande initiale est floue
+- **Ambiguïté dans le 00_PROJECT** : Si la demande initiale est floue
 - **Conflit entre specs** : Si deux contraintes sont incompatibles
 - **Blocage créatif** : Si tu ne sais pas comment résoudre un problème narratif
 

@@ -4,21 +4,21 @@ version: 2.0
 pipeline:
   - name: "Context Loading"
     description: "Assemble Lore and Specs"
-    script: "python 00_SYSTEM/automation/context_assembler.py"
-    inputs: ["02_ARCHITECTURE/specs_json/*.json"]
+    script: "python _SYSTEM/automation/context_assembler.py"
+    inputs: ["02_STRUCTURE/specs_json/*.json"]
     
   - name: "Drafting"
     description: "Generate Raw Text"
     agent: "Writer"
     model: "gemini-pro-1.5"
-    output_dir: "03_SOURCE/01_drafts/"
+    output_dir: "03_MANUSCRIPT/01_drafts/"
     
   - name: "Linting"
     description: "Static Analysis & Style Check"
     agent: "Critic"
-    rules: "04_TEST_SUITE/linting_rules/"
-    script: "python 00_SYSTEM/automation/test_runner.py"
+    rules: "04_TESTS/linting_rules/"
+    script: "python _SYSTEM/automation/test_runner.py"
     
   - name: "Formatting"
     description: "Prepare for Staging"
-    output_dir: "03_SOURCE/02_staging/"
+    output_dir: "03_MANUSCRIPT/02_staging/"
