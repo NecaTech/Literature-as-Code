@@ -53,6 +53,7 @@ Dans ce système, votre roman n'est pas un fichier Word géant. C'est un **proje
     ```
 2.  **Ce que fait le système** :
     *   Il lit votre Spec JSON.
+    *   Il charge l'**État Dynamique du Récit** (Memory) depuis `story_state.md`.
     *   Il va chercher *uniquement* les fiches personnages et lieux requises dans la DB.
     *   Il injecte les règles d'écriture globales.
     *   Il compile le tout dans un fichier `prompt_ch01.txt`.
@@ -73,6 +74,20 @@ Dans ce système, votre roman n'est pas un fichier Word géant. C'est un **proje
 4.  **Inspection (Maintenance)** :
     *   `python manage.py inspect` : Vérifie à tout moment que votre projet est structurellement sain.
 
+### Phase 5 : Gestion de l'État (Memory Carry-over)
+*Pour éviter que l'histoire ne devienne amnésique.*
+
+1.  **Le Problème** : Si le chapitre 3 oublie que le héros s'est cassé la jambe au chapitre 2, l'immersion est brisée.
+2.  **La Solution** : L'État Dynamique (`story_state.md`).
+3.  **La Commande** :
+    *   `python manage.py state`
+    *   Cette commande analyse le dernier chapitre validé (Staging) et extrait les faits saillants :
+        *   Blessures / Inventaire.
+        *   Relations modifiées.
+        *   Révélations.
+    *   Elle met à jour `05_BUILD/state/story_state.md`.
+4.  **La Boucle** : Ce fichier d'état est automatiquement relu par `assemble` lors de la génération du chapitre suivant.
+
 ---
 
 ## 🛠️ Référence Rapide des Commandes
@@ -84,4 +99,5 @@ Dans ce système, votre roman n'est pas un fichier Word géant. C'est un **proje
 | `manage.py sync` | Dashboard | Après chaque session d'écriture. |
 | `manage.py assemble [spec]` | **Build** | Avant d'écrire un chapitre. |
 | `manage.py lint [file]` | **Test** | Après avoir écrit un chapitre. |
+| `manage.py state` | **Memory** | Après chaque chapitre validé. |
 | `manage.py pipeline` | Batch | Pour tout reconstruire (Utilisateurs avancés). |

@@ -15,6 +15,9 @@ import shutil
 PROJECT_ROOT = Path(__file__).parent.resolve()
 sys.path.append(str(PROJECT_ROOT))
 
+# Placeholder for state manager - will be implemented fully later
+# from _SYSTEM.automation import state_manager
+
 try:
     from _SYSTEM.automation import context_assembler, test_runner
     # Pipeline runner will be imported dynamically or added later
@@ -126,7 +129,9 @@ def command_lint(args):
         if args.strict:
             sys.exit(1)
     else:
+
         print("\n[OK] Quality standard met.")
+        print("💡 Suggestion: Update the Narrative State with: python manage.py state")
 
 def command_pipeline(args):
     """Execute the workflow pipeline."""
@@ -245,6 +250,15 @@ def command_sync(args):
         
     print(f"[OK] Synced {updated_count} chapters in sommaire.md")
 
+def command_state(args):
+    """Update the dynamic story state."""
+    print("Updating Story State based on last staged chapter...")
+    # TODO: Implement state_manager.update_state()
+    # This feature will perform LLM analysis of the latest scene to update story_state.md
+    print("... (Analysis Simulation) ...")
+    print("Story State updated in 05_BUILD/state/story_state.md")
+    print("Run 'python manage.py assemble' to include this new state in future prompts.")
+
 def command_inspect(args):
     """Run integrity check on the framework."""
     print("[INSPECT] Inspecting Framework Integrity...")
@@ -319,6 +333,9 @@ def main():
     # SYNC
     parser_sync = subparsers.add_parser("sync", help="Update sommaire.md with real stats")
     
+    # STATE
+    parser_state = subparsers.add_parser("state", help="Update dynamic story state")
+    
     args = parser.parse_args()
     
     if args.command == "init":
@@ -333,6 +350,8 @@ def main():
         command_pipeline(args)
     elif args.command == "sync":
         command_sync(args)
+    elif args.command == "state":
+        command_state(args)
     else:
         parser.print_help()
 

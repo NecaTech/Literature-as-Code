@@ -71,13 +71,38 @@ def fetch_context(context_paths: List[str]) -> Dict[str, str]:
     return context_content
 
 
-def assemble_prompt(spec: Dict, context_content: Dict[str, str]) -> str:
+
+def load_story_state(story_state_path: str = "05_BUILD/state/story_state.md") -> str:
     """
-    Combines spec and context into a single prompt for the LLM.
+    Loads the dynamic story state. Initializes it if missing.
+    """
+    full_path = PROJECT_ROOT / story_state_path
+    
+    if not full_path.exists():
+        print(f"[INFO] Initializing new Story State at: {story_state_path}")
+        full_path.parent.mkdir(parents=True, exist_ok=True)
+        initial_content = "# Dynamic Story State\n[Initialisation]"
+        with open(full_path, 'w', encoding='utf-8') as f:
+            f.write(initial_content)
+        return initial_content
+        
+    try:
+        with open(full_path, 'r', encoding='utf-8') as f:
+            content = f.read()
+        print(f"[OK] Loaded Story State ({len(content)} chars)")
+        return content
+    except Exception as e:
+        print(f"[ERR] Error reading Story State: {e}")
+        return "[Error loading Story State]"
+
+def assemble_prompt(spec: Dict, context_content: Dict[str, str], story_state_content: str) -> str:
+    """
+    Combines spec, story state, and context into a single prompt for the LLM.
     
     Args:
         spec: The chapter specification
         context_content: Dictionary of file contents
+        story_state_content: The current dynamic state of the narrative
         
     Returns:
         Formatted prompt string ready for LLM
@@ -95,6 +120,11 @@ def assemble_prompt(spec: Dict, context_content: Dict[str, str]) -> str:
     prompt_parts.append(f"Beat: {spec.get('beat')}")
     prompt_parts.append(f"Narrative Goal: {spec.get('narrative_goal')}")
     prompt_parts.append(f"Emotional Beat: {spec.get('emotional_beat')}\n")
+    
+    # Story State (Priority Context)
+    prompt_parts.append("### [ÉTAT DYNAMIQUE DU RÉCIT]")
+    prompt_parts.append(story_state_content)
+    prompt_parts.append("")
     
     # Context Files
     prompt_parts.append("## LOADED CONTEXT\n")
@@ -132,6 +162,9 @@ def run(spec_path: str, output_file: Optional[str] = None) -> str:
     # Load spec
     spec = load_spec(spec_path)
     
+    # Load Story State
+    story_state = load_story_state()
+    
     # Extract context paths from spec
     context_paths = []
     
@@ -154,7 +187,7 @@ def run(spec_path: str, output_file: Optional[str] = None) -> str:
     context_content = fetch_context(context_paths)
     
     # Assemble prompt
-    prompt = assemble_prompt(spec, context_content)
+    prompt = assemble_prompt(spec, context_content, story_state)
     
     # Save if requested
     if output_file:
