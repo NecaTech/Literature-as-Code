@@ -44,9 +44,10 @@ def run_step(step):
             print(f"  X Step failed with exit code {e.returncode}")
             return False
             
-    # 2. Check for agent/LLM (mocked for now)
+    # 2. Check for agent/LLM (Interactive Step)
     elif 'agent' in step:
-        print(f"  (Mock) Agent '{step.get('agent')}' logic not implemented yet.")
+        print(f"  [Interactive Step] Action Required from Assistant/User: '{step.get('agent')}'")
+        print(f"  > Please perform the action described: {step.get('description')}")
         return True
         
     else:

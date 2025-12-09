@@ -47,23 +47,24 @@ Transformer la matière brute (idées, trames, notes) en un roman structuré et 
 
 **Action** :
 1. **N'essaie pas de deviner le contexte.**
-2. Exécute la commande d'assemblage :
+2. Exécute la commande d'assemblage (Outil Helper) :
    ```bash
    python manage.py assemble 02_STRUCTURE/specs_json/ch01_spec.json -o 05_BUILD/logs/prompt_ch01.txt
    ```
-3. Lis le fichier généré (`prompt_ch01.txt`) pour charger la mémoire de travail (Personnages, Lieux, Règles).
+3. Lis le fichier généré (`prompt_ch01.txt`). C'est ta mémoire de travail pour la session.
 
 **Output** : Mémoire chargée avec zéro hallucination.
 
 ---
 
-### ÉTAPE 4 : DRAFTING (Rédaction)
+### ÉTAPE 4 : DRAFTING (Rédaction Assistée)
 **Localisation** : `03_MANUSCRIPT/01_drafts/`
 
 **Action** :
-1. **Rédige** le chapitre dans `ch{XX}_v0.md`.
-2. Respecte les `docs/best_practices/` (Show Don't Tell, Dialogues).
-3. **Mise à jour** : Passe le status du chapitre à `🟡 Draft` dans `sommaire.md`.
+1. **Toi (l'Agent)**, utilise le contexte chargé pour rédiger le chapitre.
+2. Crée le fichier `ch{XX}_v0.md` directement dans l'IDE.
+3. Respecte les `docs/best_practices/` (Show Don't Tell, Dialogues).
+4. **Mise à jour** : Passe le status du chapitre à `🟡 Draft` dans `sommaire.md`.
 
 **Output** : Premier jet brut.
 

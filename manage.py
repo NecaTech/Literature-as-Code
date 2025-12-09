@@ -92,10 +92,27 @@ def command_lint(args):
     with open(args.file, 'r', encoding='utf-8') as f:
         content = f.read()
         
-    # Load specs mock or real? For now, empty spec if not provided
-    # ideally we find the matching spec for the chapter
-    spec = {} 
-    
+    # Load Spec logic
+    spec = {}
+    try:
+        # Infer spec path from filename (e.g. ch01_v0.md -> ch01_spec.json)
+        # 1. Extract chapter number "01" from "ch01_v0.md"
+        base_name = os.path.basename(args.file)
+        # Simple extraction: assuming format chXX...
+        if base_name.startswith("ch") and base_name[2:4].isdigit():
+            ch_num = base_name[2:4]
+            spec_name = f"ch{ch_num}_spec.json"
+            spec_path = PROJECT_ROOT / "02_STRUCTURE/specs_json" / spec_name
+            
+            if spec_path.exists():
+                with open(spec_path, 'r', encoding='utf-8') as f:
+                    spec = json.load(f)
+                print(f"✓ Loaded Spec: {spec_name}")
+            else:
+                print(f"⚠ Warning: Spec file not found: {spec_name}")
+    except Exception as e:
+        print(f"⚠ Warning: Could not auto-load spec: {e}")
+
     report = test_runner.evaluate_draft(content, spec)
     
     if report['overall_score'] < 0.8:
@@ -109,6 +126,118 @@ def command_pipeline(args):
     """Execute the workflow pipeline."""
     from _SYSTEM.automation import pipeline_runner
     pipeline_runner.run()
+
+def command_sync(args):
+    """Update sommaire.md with real file stats."""
+    print("Syncing Status Board...")
+    
+    sommaire_path = PROJECT_ROOT / "03_MANUSCRIPT/01_drafts/sommaire.md"
+    drafts_dir = PROJECT_ROOT / "03_MANUSCRIPT/01_drafts"
+    
+    if not sommaire_path.exists():
+        print(f"Error: Sommaire not found at {sommaire_path}")
+        return
+
+    with open(sommaire_path, 'r', encoding='utf-8') as f:
+        lines = f.readlines()
+        
+    new_lines = []
+    updated_count = 0
+    
+    # State machine for parsing
+    in_table = False
+    headers = []
+    
+    for line in lines:
+        stripped = line.strip()
+        
+        # Detect table start/end/content
+        if stripped.startswith('|'):
+            if not in_table:
+                # This might be header or separator. We assume first piped line is header.
+                pass
+                
+            parts = [p.strip() for p in stripped.split('|')]
+            # parts[0] is empty if line starts with |, parts[-1] empty if ends with |
+            # e.g. | ID | Act | ... | -> ['', 'ID', 'Act', ..., '']
+            
+            # Identify columns if this is the header row
+            if 'ID' in parts and 'Mots' in parts:
+                headers = parts
+                new_lines.append(line)
+                continue
+                
+            # Skip separator line |---:|
+            if '---' in stripped:
+                new_lines.append(line)
+                continue
+                
+            # Data row
+            # Extract Chapter ID (Assuming ID is usually at index 1 based on split)
+            try:
+                # Find index of key columns based on simple fixed structure for now
+                # Or try to match index from headers if robust
+                id_idx = 1
+                status_idx = 5
+                words_idx = 6
+                
+                ch_id = parts[id_idx] # e.g. CH01
+                
+                if ch_id.startswith('CH') and ch_id[2:].isdigit():
+                    ch_num = ch_id[2:] # 01
+                    
+                    # Look for file
+                    # We look for any file starting with ch01_ in drafts dir
+                    found_file = False
+                    word_count = 0
+                    
+                    for f_path in drafts_dir.glob(f"ch{ch_num}_*.md"):
+                         # Avoid matching the spec or other things if naming is loose
+                         # But ch01_v0.md is standard
+                         found_file = True
+                         with open(f_path, 'r', encoding='utf-8') as f_content:
+                             text = f_content.read()
+                             word_count = len(text.split())
+                         break # Stop after first match (canonical file)
+                    
+                    # Update Logic
+                    current_status = parts[status_idx]
+                    
+                    if found_file:
+                        # Update Word Count
+                        parts[words_idx] = str(word_count)
+                        
+                        # Update Status: distinct logic
+                        # If Todo -> Draft
+                        if "Todo" in current_status:
+                             parts[status_idx] = "🟡 Draft"
+                        # Else leave it (Review/Done)
+                    else:
+                        # File missing, ensure it says Todo? Or leave as is?
+                        # Let's leave as is or set to 0 words
+                        parts[words_idx] = "0"
+                        
+                    # Reconstruct line
+                    # Join with " | " 
+                    # Note: split adds empty strings at ends, so we reconstruct carefully
+                    # | ID | ...
+                    new_line = " | ".join(parts)
+                    new_lines.append(new_line + "\n")
+                    updated_count += 1
+                else:
+                    new_lines.append(line)
+            except Exception as e:
+                # parsing error, keep line as is
+                # print(f"Warning parsing line: {stripped} - {e}")
+                new_lines.append(line)
+        else:
+            new_lines.append(line)
+
+    # Write back
+    with open(sommaire_path, 'w', encoding='utf-8') as f:
+        f.writelines(new_lines)
+        
+    print(f"✓ Synced {updated_count} chapters in sommaire.md")
 
 def main():
     parser = argparse.ArgumentParser(description="Literature as Code - Manager CLI")
@@ -129,6 +258,9 @@ def main():
     
     # PIPELINE
     parser_pipe = subparsers.add_parser("pipeline", help="Run the full workflow pipeline")
+
+    # SYNC
+    parser_sync = subparsers.add_parser("sync", help="Update sommaire.md with real stats")
     
     args = parser.parse_args()
     
@@ -140,6 +272,8 @@ def main():
         command_lint(args)
     elif args.command == "pipeline":
         command_pipeline(args)
+    elif args.command == "sync":
+        command_sync(args)
     else:
         parser.print_help()
 
