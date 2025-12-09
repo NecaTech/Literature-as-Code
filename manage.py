@@ -72,6 +72,29 @@ def command_init(args):
                 shutil.copy(item, dst_file)
                 print(f"[OK] Installed Rule: {item.name}")
 
+    # Copy Context Templates (Characters & World)
+    # Character Template
+    char_tpl_src = defaults_dir / "templates/tpl_character.md"
+    if char_tpl_src.exists():
+        # Create Hero
+        hero_dst = PROJECT_ROOT / "01_CONTEXT_DB/characters/hero.md"
+        if not hero_dst.exists():
+            shutil.copy(char_tpl_src, hero_dst)
+            print(f"[OK] Created Default Hero: {hero_dst.relative_to(PROJECT_ROOT)}")
+        
+        # Create Shadow/Antagonist
+        shadow_dst = PROJECT_ROOT / "01_CONTEXT_DB/characters/shadow.md"
+        if not shadow_dst.exists():
+            shutil.copy(char_tpl_src, shadow_dst)
+            print(f"[OK] Created Default Shadow: {shadow_dst.relative_to(PROJECT_ROOT)}")
+
+    # World Template
+    world_tpl_src = defaults_dir / "templates/tpl_world.md"
+    world_dst = PROJECT_ROOT / "01_CONTEXT_DB/world/world.md"
+    if world_tpl_src.exists() and not world_dst.exists():
+        shutil.copy(world_tpl_src, world_dst)
+        print(f"[OK] Created Default World: {world_dst.relative_to(PROJECT_ROOT)}")
+
     # Copy Sommaire Template
     sommaire_src = defaults_dir / "templates/sommaire.md"
     sommaire_dst = PROJECT_ROOT / "03_MANUSCRIPT/01_drafts/sommaire.md"
