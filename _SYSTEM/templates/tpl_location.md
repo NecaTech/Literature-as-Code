@@ -1,3 +1,8 @@
+---
+type: location
+id: [loc_id]
+tags: [type, mood]
+---
 # Fiche Lieu : [NOM DU LIEU]
 
 ## Vue d'ensemble

@@ -1,3 +1,8 @@
+---
+type: character
+id: [char_id]
+tags: [role, faction]
+---
 # Fiche Personnage : [NOM]
 
 ## Identité

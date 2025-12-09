@@ -1,17 +1,11 @@
-# Casting
+# Casting (Index)
 
-## Protagoniste (Le Héros)
-- **Nom** :
-- **Role** :
-- **Ghost (Fantôme du passé)** :
-- **Lie (Le mensonge qu'il se raconte)** :
-- **Truth (La vérité qu'il doit apprendre)** :
-- **Want (Objectif conscient)** :
-- **Need (Besoin inconscient)** :
+Ceci est la liste maîtresse des personnages. Chaque personnage doit avoir sa fiche détaillée dans `01_CONTEXT_DB/characters/`.
 
-## Antagoniste
-- **Nom** :
-- **Pourquoi il/elle est le miroir inversé du héros ?** :
+| ID | Nom | Rôle | Archétype | Fiche Détaillée |
+|:--:|:---|:---|:---|:---|
+| `hero` | [Nom] | Protagoniste | ... | [Voir Fiche](../01_CONTEXT_DB/characters/hero.md) |
+| `shadow` | [Nom] | Antagoniste | ... | [Voir Fiche](../01_CONTEXT_DB/characters/shadow.md) |
 
-## Alliés
-- ...
+## Quick Note
+Utilisez les IDs dans vos Specs de chapitres (`required_characters`).

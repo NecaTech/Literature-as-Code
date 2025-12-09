@@ -43,16 +43,22 @@ def command_init(args):
     # 2. Copy templates if directories are empty
     defaults_dir = PROJECT_ROOT / "_SYSTEM/defaults"
     
-    # Copy Specs Templates
+    # Copy Specs Templates (Conceptual)
     specs_src = defaults_dir / "templates"
     specs_dst = PROJECT_ROOT / "00_SPECS"
     if specs_src.exists():
-        for item in specs_src.glob("*"):
+        for item in specs_src.glob("*.md"): # Copy only markdown files to SPECS
             dst_file = specs_dst / item.name
             if not dst_file.exists():
                 shutil.copy(item, dst_file)
-                print(f"✓ Created: {dst_file.relative_to(PROJECT_ROOT)}")
-                
+                print(f"[OK] Created: {dst_file.relative_to(PROJECT_ROOT)}")
+
+    # Copy Chapter Spec JSON Template
+    ch_spec_src = defaults_dir / "templates/tpl_chapter_spec.json"
+    ch_spec_dst = PROJECT_ROOT / "02_STRUCTURE/specs_json/tpl_chapter_spec.json"
+    if ch_spec_src.exists() and not ch_spec_dst.exists():
+        shutil.copy(ch_spec_src, ch_spec_dst)
+        print(f"[OK] Created: {ch_spec_dst.relative_to(PROJECT_ROOT)}")
     # Copy Linting Rules
     rules_src = defaults_dir / "linting_rules"
     rules_dst = PROJECT_ROOT / "04_TESTS/linting_rules"
@@ -61,16 +67,16 @@ def command_init(args):
             dst_file = rules_dst / item.name
             if not dst_file.exists():
                 shutil.copy(item, dst_file)
-                print(f"✓ Installed Rule: {item.name}")
+                print(f"[OK] Installed Rule: {item.name}")
 
     # Copy Sommaire Template
     sommaire_src = defaults_dir / "templates/sommaire.md"
     sommaire_dst = PROJECT_ROOT / "03_MANUSCRIPT/01_drafts/sommaire.md"
     if sommaire_src.exists() and not sommaire_dst.exists():
         shutil.copy(sommaire_src, sommaire_dst)
-        print(f"✓ Created: {sommaire_dst.relative_to(PROJECT_ROOT)}")
+        print(f"[OK] Created: {sommaire_dst.relative_to(PROJECT_ROOT)}")
 
-    print("✓ Project initialized successfully.")
+    print("[OK] Project initialized successfully.")
 
 def command_assemble(args):
     """Run Context Assembler."""
@@ -107,20 +113,20 @@ def command_lint(args):
             if spec_path.exists():
                 with open(spec_path, 'r', encoding='utf-8') as f:
                     spec = json.load(f)
-                print(f"✓ Loaded Spec: {spec_name}")
+                print(f"[OK] Loaded Spec: {spec_name}")
             else:
-                print(f"⚠ Warning: Spec file not found: {spec_name}")
+                print(f"[WARN] Warning: Spec file not found: {spec_name}")
     except Exception as e:
-        print(f"⚠ Warning: Could not auto-load spec: {e}")
+        print(f"[WARN] Warning: Could not auto-load spec: {e}")
 
     report = test_runner.evaluate_draft(content, spec)
     
     if report['overall_score'] < 0.8:
-        print("\n⚠ Quality standard not met (< 0.8)")
+        print("\n[WARN] Quality standard not met (< 0.8)")
         if args.strict:
             sys.exit(1)
     else:
-        print("\n✓ Quality standard met.")
+        print("\n[OK] Quality standard met.")
 
 def command_pipeline(args):
     """Execute the workflow pipeline."""
@@ -237,7 +243,55 @@ def command_sync(args):
     with open(sommaire_path, 'w', encoding='utf-8') as f:
         f.writelines(new_lines)
         
-    print(f"✓ Synced {updated_count} chapters in sommaire.md")
+    print(f"[OK] Synced {updated_count} chapters in sommaire.md")
+
+def command_inspect(args):
+    """Run integrity check on the framework."""
+    print("[INSPECT] Inspecting Framework Integrity...")
+    
+    issues = []
+    
+    # 1. Check Directory Structure
+    required_dirs = [
+        "00_SPECS", "_SYSTEM", "_SYSTEM/defaults", 
+        "03_MANUSCRIPT/01_drafts", "manage.py", "HOWTO.md"
+    ]
+    
+    print("\n[FileSystem Check]")
+    for path in required_dirs:
+        p = PROJECT_ROOT / path
+        if p.exists():
+            print(f"  [OK] Found {path}")
+        else:
+            print(f"  [MISSING] MISSING {path}")
+            issues.append(f"Missing critical file/dir: {path}")
+
+    # 2. Check CLI vs Docs Consistency
+    # We naive-check if commands in manage.py are mentioned in HOWTO.md
+    print("\n[Documentation Check]")
+    howto_path = PROJECT_ROOT / "HOWTO.md"
+    if howto_path.exists():
+        with open(howto_path, 'r', encoding='utf-8') as f:
+            howto_content = f.read()
+            
+        commands = ["init", "assemble", "lint", "pipeline", "sync", "inspect"]
+        for cmd in commands:
+            if f"`{cmd}`" in howto_content or f"command `{cmd}`" in howto_content or f"manage.py {cmd}" in howto_content:
+                print(f"  [OK] Documented: {cmd}")
+            else:
+                print(f"  [WARN] Undocumented: {cmd}")
+                issues.append(f"Command '{cmd}' is not clearly documented in HOWTO.md")
+    else:
+        issues.append("HOWTO.md is missing")
+
+    # Summary
+    print("\n[Inspection Summary]")
+    if not issues:
+        print("  [OK] System Healthy. Ready for production.")
+    else:
+        print(f"  [WARN] Found {len(issues)} issues:")
+        for i in issues:
+            print(f"     - {i}")
 
 def main():
     parser = argparse.ArgumentParser(description="Literature as Code - Manager CLI")
@@ -245,6 +299,9 @@ def main():
     
     # INIT
     parser_init = subparsers.add_parser("init", help="Initialize project structure")
+    
+    # INSPECT
+    parser_inspect = subparsers.add_parser("inspect", help="Check framework integrity")
     
     # ASSEMBLE
     parser_assemble = subparsers.add_parser("assemble", help="Assemble context for a chapter")
@@ -266,6 +323,8 @@ def main():
     
     if args.command == "init":
         command_init(args)
+    elif args.command == "inspect":
+        command_inspect(args)
     elif args.command == "assemble":
         command_assemble(args)
     elif args.command == "lint":

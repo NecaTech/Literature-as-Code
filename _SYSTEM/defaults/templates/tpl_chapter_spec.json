@@ -1,0 +1,23 @@
+{
+  "chapter_id": "ch01",
+  "title": "Titre du Chapitre",
+  "act": "1",
+  "beat": "Catalyst",
+  "narrative_goal": "Goal (Objectif du Perso)",
+  "emotional_beat": "Fear to Courage",
+  "required_characters": [
+    "hero",
+    "shadow"
+  ],
+  "settings": [
+    {
+      "location_id": "location_city",
+      "time_of_day": "Night"
+    }
+  ],
+  "constraints": {
+    "pov": "hero",
+    "word_count_target": 2500,
+    "tone": "Dark"
+  }
+}

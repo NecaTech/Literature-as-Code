@@ -35,7 +35,7 @@ def load_spec(spec_path: str) -> Dict:
     with open(full_path, 'r', encoding='utf-8') as f:
         spec = json.load(f)
     
-    print(f"✓ Loaded spec: {spec.get('chapter_id', 'unknown')}")
+    print(f"[OK] Loaded spec: {spec.get('chapter_id', 'unknown')}")
     return spec
 
 
@@ -63,9 +63,9 @@ def fetch_context(context_paths: List[str]) -> Dict[str, str]:
             with open(full_path, 'r', encoding='utf-8') as f:
                 content = f.read()
                 context_content[path] = content
-                print(f"✓ Loaded: {path} ({len(content)} chars)")
+                print(f"[OK] Loaded: {path} ({len(content)} chars)")
         except Exception as e:
-            print(f"✗ Error reading {path}: {e}")
+            print(f"[ERR] Error reading {path}: {e}")
             context_content[path] = f"[ERROR: {e}]"
     
     return context_content
@@ -133,13 +133,15 @@ def run(spec_path: str, output_file: Optional[str] = None) -> str:
     spec = load_spec(spec_path)
     
     # Extract context paths from spec
-    # For now, we look for characters in required_characters
     context_paths = []
     
+    # 1. Characters
     if 'required_characters' in spec:
         for char_id in spec['required_characters']:
+            # Assume strict naming convention: id + .md
             context_paths.append(f"01_CONTEXT_DB/characters/{char_id}.md")
-    
+            
+    # 2. Settings
     if 'settings' in spec:
         for setting in spec['settings']:
             loc_id = setting.get('location_id')
@@ -147,7 +149,7 @@ def run(spec_path: str, output_file: Optional[str] = None) -> str:
                 context_paths.append(f"01_CONTEXT_DB/world/{loc_id}.md")
     
     print(f"\nFetching {len(context_paths)} context files...")
-    
+
     # Fetch context
     context_content = fetch_context(context_paths)
     
@@ -160,7 +162,7 @@ def run(spec_path: str, output_file: Optional[str] = None) -> str:
         output_path.parent.mkdir(parents=True, exist_ok=True)
         with open(output_path, 'w', encoding='utf-8') as f:
             f.write(prompt)
-        print(f"\n✓ Context saved to: {output_file}")
+        print(f"\n[OK] Context saved to: {output_file}")
     
     print("=" * 60)
     print(f"Total context size: {len(prompt)} characters")
