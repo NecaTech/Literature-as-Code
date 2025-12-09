@@ -1,101 +1,67 @@
 # 📚 Literature as Code : Le Framework
 
-> **Version** : 1.0.0 (Alpha)
-> **Philosophie** : Traiter l'écriture d'un roman comme un projet d'ingénierie logicielle complexe.
+> **Version** : 2.0.0 (Narrative Engine)
+> **Philosophie** : Traiter l'écriture d'un roman comme un projet d'ingénierie logicielle.
 >
-> 🆘 **Besoin d'aide ?** Commencez par lire le [GUIDE D'UTILISATION (HOWTO)](HOWTO.md).
+> 🚀 **Démarrage Rapide** : Lisez le [MANUEL DE L'INGÉNIEUR (HOWTO)](HOWTO.md).
+
+---
 
 ## 🌟 La Vision
-Ce projet n'est pas un simple dossier de textes. C'est un **IDE Littéraire** conçu pour résoudre les problèmes majeurs de la génération d'histoires par IA (et par humains) :
-1.  **Amnésie** (Oubli des détails passés).
-2.  **Structure Plate** (Manque de tension dramatique).
-3.  **Personnages Statiques** (Absence d'évolution psychologique).
-4.  **Style "Beige"** (Prose lisse et sans saveur).
-
-Nous remplaçons l'improvisation par une **Architecture Modulaire** et des **Tests Unitaires Narratifs**.
-
----
-
-## 🏗️ Architecture du Projet
-
-### `_SYSTEM/` (Le Moteur)
-Le cerveau de l'opération. Contient la configuration et les outils.
-*   **`templates/`** : Les modèles de fichiers pour standardiser la création.
-    *   [`tpl_character.md`](_SYSTEM/templates/tpl_character.md) : Fiche perso avec Ghost/Lie/Truth.
-    *   [`tpl_chapter_spec.md`](_SYSTEM/templates/tpl_chapter_spec.md) : Ticket JIRA pour un chapitre.
-*   **`prompts/`** : Les instructions système pour les Agents (Architecte, Writer, Critic).
-
-
-
-### `01_CONTEXT_DB/` (La Base de Données)
-La **Source de Vérité** immuable. Si ce n'est pas écrit ici, ça n'existe pas.
-*   **`characters/`** : Fiches détaillées de tous les acteurs.
-*   **`world/`** : Règles de l'univers, lieux, factions, magie/technologie.
-
-### `02_STRUCTURE/` (Le Blueprint)
-Le plan de construction, structuré par **Actes** (Thèse, Antithèse, Synthèse).
-*   Contient la `global_story_map.md` (Beat Sheet).
-*   Chaque sous-dossier (`act_1_thesis`, etc.) contient les specs des chapitres à écrire.
-
-### `03_MANUSCRIPT/` (Le Manuscrit)
-Le code source du roman, versionné.
-*   **`01_drafts/`** : Premier jet (Vomit Draft).
-*   **`02_staging/`** : Version révisée et corrigée.
-*   **`03_master/`** : Version finale validée (Golden Master).
-
-### `04_TESTS/` (Le QA)
-Outils de vérification de la qualité.
-*   **`linting_rules/`** : Règles de style (Show Don't Tell, Rythme).
-*   **`continuity_tests/`** : Vérification de la cohérence temporelle.
-
-### `docs/` (La Bibliothèque)
-Documentation théorique et méthodologique.
-*   **`expert_narratology/`** : Théorie pure (Save The Cat, Arcs, Ironie).
-*   **`best_practices/`** : Guides techniques (Dialogues, Tchekhov).
+Ce framework transforme votre roman en une **Codebase compilée**.
+Il remplace l'improvisation chaotique par un **Pipeline de Production** rigoureux :
+1.  **Architecture** : Base de données structurée (Personnages, Lieux).
+2.  **Spécification** : Fichiers JSON définissant précisément chaque chapitre.
+3.  **Compilation** : Assemblage automatique du contexte pertinent (RAG).
+4.  **CI/CD** : Tests unitaires (Linting) et tableau de bord automatique.
 
 ---
 
-## 🚀 Workflow (Le Pipeline de Production)
+## 🔄 Le Pipeline en 4 Phases
 
-### Phase 1 : R&D et Conception
-1.  Identifier un problème (ex: "Mes dialogues sont plats").
-2.  Créer un **Pain Point** dans `docs/best_practices/`.
-3.  Documenter la solution théorique dans `docs/`.
+### 1. Architecture (`00_SPECS` & `01_CONTEXT_DB`)
+*   **La Bible** : Vous ne rédigez pas au fil de l'eau. Vous peuplez une base de données.
+*   Chaque personnage et lieu est un fichier Markdown avec Frontmatter YAML.
+*   *Pas de fiche ? Pas de chapitre.*
 
-### Phase 2 : Architecture (Pre-Prod)
-1.  Définir la **Controlling Idea** et le **Thème**.
-2.  Créer les fiches personnages dans `01_CONTEXT_DB` (Définir Ghost/Lie/Truth).
-3.  Mapper les 15 Beats de l'histoire dans `02_STRUCTURE`.
-4.  Créer une **Spec** pour chaque chapitre (`tpl_chapter_spec.md`).
+### 2. Blueprint (`02_STRUCTURE`)
+*   **Ingénierie Narrative** : Chaque chapitre est défini par une **Spec JSON**.
+*   Ce fichier dicte le but narratif, les émotions et les personnages requis.
+*   C'est la "Vérité Technique" avant la prose.
 
-### Phase 3 : Drafting (Prod)
-1.  L'Agent Writer prend une Spec et le Context DB.
-2.  Il génère le texte dans `03_MANUSCRIPT/01_drafts`.
+### 3. Build (`manage.py assemble`)
+*   Le moteur (**Context Assembler**) lit votre Spec JSON.
+*   Il va chercher *chirurgicalement* les infos nécessaires dans la DB.
+*   Il génère un **Prompt Parfait**, pur et sans bruit, prêt pour la rédaction.
 
-### Phase 4 : Review & Refactor (Post-Prod)
-1.  L'Agent Critic analyse le draft par rapport à la Spec et aux `linting_rules`.
-2.  Le texte est corrigé et promu dans `03_MANUSCRIPT/02_staging`.
-
----
-
-## 🤖 v2.0 Architecture Technique (Narrative Engine)
-
-> **Mise à jour (Dec 2025)** : Transition vers une architecture "Software-First".
-
-Nous ne dépendons plus uniquement de la discipline humaine. Un pipeline CI/CD (`workflow.yaml`) orchestre la production :
-
-1.  **Specs as Code** : Les chapitres sont définis en JSON (`02_STRUCTURE/specs_json/`) pour être lisibles par les machines.
-2.  **Automation Layer** : Des scripts Python (`_SYSTEM/automation/`) gèrent l'assemblage du contexte (RAG) et l'exécution des tests.
-3.  **LLM-as-a-Judge** : La qualité est mesurée par des tests unitaires (`test_runner.py`) avant validation.
+### 4. Production (`03_MANUSCRIPT`)
+*   **Drafting** : Rédaction du texte (Humain ou IA) basée sur le Prompt compilé.
+*   **Linting** : `manage.py lint` analyse la qualité (Show Don't Tell, Adverbes).
+*   **Sync** : `manage.py sync` met à jour votre tableau de bord `sommaire.md`.
 
 ---
 
-## 🛠️ Commandes Utiles (Mental Model)
+## 🛠️ La Boîte à Outils (CLI)
 
-*   **"Initialiser un Perso"** : Copier `tpl_character.md` vers `01_CONTEXT_DB/characters/nom_du_perso.md`.
-*   **"Lancer un Chapitre"** : Copier `tpl_chapter_spec.md` vers `02_STRUCTURE/act_X/chXX_titre.md`.
-*   **"Debuguer une Scène"** : Vérifier si elle respecte la *Controlling Idea* et si le *Conflit* est clair.
+Tout est piloté par `manage.py` :
+
+```bash
+# Vérifier la santé du projet
+python manage.py inspect
+
+# Initialiser la structure
+python manage.py init
+
+# Compiler un chapitre (Build)
+python manage.py assemble 02_STRUCTURE/specs_json/ch01.json -o build.txt
+
+# Vérifier la qualité (Test)
+python manage.py lint 03_MANUSCRIPT/01_drafts/ch01.md
+
+# Mettre à jour les stats (Dashboard)
+python manage.py sync
+```
 
 ---
 
-> *Ce système est vivant. Il évolue avec notre compréhension de la narration.*
+> *Ne commencez pas à écrire. Commencez par compiler.*
