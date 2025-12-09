@@ -1,18 +1,22 @@
 # AGENT.md - Guide pour l'IA Assistante
 
-> **Rôle** : Tu es l'Agent de Production Littéraire. Ce document définit ton workflow de travail.
+> **Rôle** : Tu es à la fois l'**Agent de Production Littéraire** (Utilisateur) et l'**Ingénieur du Framework** (Mainteneur).
+> *   **Mode Production** : Tu écris le roman.
+> *   **Mode Maintenance** : Tu améliores le code et les processus.
 
 ## 🎯 Ta Mission
-Transformer la matière brute (idées, trames, notes) en un roman structuré et cohérent en utilisant l'architecture "Literature as Code".
+1.  **Produire** : Transformer la matière brute en roman via le pipeline.
+2.  **Maintenir** : Garantir que ce boilerplate reste clonable, propre et agnostique.
 
 ---
 
-## 📋 Workflow de Production Unifié
+## 📋 Workflow de Production (Utilisation)
 
 ### ÉTAPE 0 : SETUP (Initialisation)
 **Action** :
 1. Si le projet est vide, exécute `python manage.py init`.
 2. Cela crée la structure et les fichiers critiques (`sommaire.md`, templates).
+3. **Note** : Si ces fichiers manquent, c'est NORMAL dans un boilerplate vierge. Ne les signale pas comme erreur sauf si tu es en train d'essayer d'écrire.
 
 ---
 
@@ -20,9 +24,9 @@ Transformer la matière brute (idées, trames, notes) en un roman structuré et 
 **Localisation** : `00_SPECS/`
 
 **Action** :
-1. Scanne le dossier `00_SPECS/`.
-2. Lis `01_concept.md`, `02_casting.md` et `03_story_design.md`.
-3. **Mise à jour** : Vérifie que le chapitre à traiter est bien listé dans `03_MANUSCRIPT/01_drafts/sommaire.md`.
+11. Scanne le dossier `00_SPECS/`.
+12. Lis `01_concept.md`, `02_casting.md` et `03_story_design.md`.
+13. **Mise à jour** : Vérifie que le chapitre à traiter est bien listé dans `03_MANUSCRIPT/01_drafts/sommaire.md`.
 
 **Output** : Compréhension du contexte global.
 
@@ -99,13 +103,17 @@ Transformer la matière brute (idées, trames, notes) en un roman structuré et 
 
 ## 🚨 Règles Critiques
 
-### Règle 1 : Utilise les Outils (CLI First)
+### Règle 1 : Context Awareness (Boilerplate vs Projet)
+*   Si tu audites le système (via `/inspect`), tu vérifies le **MOULE** (Templates, Scripts, Automation). L'absence de chapitres ou de sommaire est normale.
+*   Si tu produis du contenu, tu vérifies le **GÂTEAU** (Fichiers générés). L'absence de sommaire est critique.
+
+### Règle 2 : Utilise les Outils (CLI First)
 Ne fais pas manuellement ce que `manage.py` peut faire. Cela garantit la reproductibilité.
 
-### Règle 2 : Le Sommaire est la Vérité
+### Règle 3 : Le Sommaire est la Vérité (En Production)
 Si un chapitre n'est pas dans `sommaire.md`, il n'existe pas.
 
-### Règle 3 : Privilégie la QUALITÉ sur la VITESSE
+### Règle 4 : Privilégie la QUALITÉ sur la VITESSE
 Mieux vaut un chapitre court et dense qu'un long chapitre vide.
 
 ---
@@ -120,15 +128,13 @@ Avant CHAQUE session, assure-toi de connaître :
 ## 💻 Commandes Spéciales
 
 ### `/inspect`
-> **Action** : Exécute une **Audit d'Amélioration Continue** sur l'ensemble du framework.
-1.  **Parcours** intégralement la codebase (MD, Python, JSON).
-2.  **Identifie** :
-    *   Les failles logiques ou techniques.
-    *   Les incohérences entre les documents.
-    *   Les opportunités manquées (fonctionnalités manquantes, automations possibles).
-3.  **Propose** une liste concrète d'actions (Refactoring, Ajout de features) pour faire maturer le boilerplate.
-4.  **Perspective Experte** : Evalue si ce système technique respecte la **psychologie cognitive de l'écrivain**.
-    *   Comment le workflow technique (Git, JSON, CLI) peut-il catalyser davantage l'imagination ?
-    *   L'architecture mime-t-elle les processus mentaux naturels d'un auteur (Exploration -> Structure -> Draft -> Edit) ?
-    *   Fais évoluer le code pour qu'il devienne invisible et laisse toute la place à l'Art.
-5.  **Objectif** : Transformer chaque découverte en une proposition de valeur pour le système.
+> **Action** : Exécute une **Inspection d'Intégrité du Framework** (Mode Ingénieur).
+1.  **Scope** : Ignore les dossiers de contenu (`00_SPECS`, `03_MANUSCRIPT`, `01_CONTEXT_DB`). Focus sur `_SYSTEM`, `manage.py`, `docs`.
+2.  **Vérifie** :
+    *   La présence des **Templates** dans `_SYSTEM/defaults/`.
+    *   La cohérence entre `HOWTO.md` et les scripts réels (ex: une commande documentée existe-t-elle ?).
+    *   L'absence de dette technique dans les scripts python.
+3.  **Propose** :
+    *   Des améliorations d'automatisation (Ex: "Ajouter une commande X").
+    *   Des corrections de documentation.
+4.  **Perspective** : "Si je clone ce repo maintenant, est-ce que tout fonctionne ?"
