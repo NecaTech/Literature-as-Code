@@ -1,0 +1,9 @@
+{
+    "name": "Weasel Words Filter",
+    "message": "Weasel word detected. Be more specific or confident.",
+    "patterns": [
+        "somewhat", "mostly", "virtually", "slightly", "relatively",
+        "seems", "appears", "looks like",
+        "basically", "essentially"
+    ]
+}

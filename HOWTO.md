@@ -20,8 +20,9 @@ flowchart LR
 
     subgraph PROCESS ["2. TRAITEMENT (Le Moteur)"]
         direction TB
-        ScriptContext[context_assembler.py\n(Charge le contexte)]
-        ScriptTest[test_runner.py\n(Vérifie la qualité)]
+        CLI[manage.py\n(Orchestrateur Unifié)]
+        ScriptContext[context_assembler.py]
+        ScriptTest[test_runner.py]
     end
 
     subgraph OUTPUT ["3. SORTIES (Le Résultat)"]
@@ -32,9 +33,11 @@ flowchart LR
 
     Project --> Spec
     Context --> ScriptContext
-    Spec --> ScriptContext
+    Spec --> CLI
+    CLI --> ScriptContext
     ScriptContext --> Draft
-    Draft --> ScriptTest
+    Draft --> CLI
+    CLI --> ScriptTest
     ScriptTest --> Report
 ```
 
@@ -44,15 +47,23 @@ flowchart LR
 
 Voici les procédures standard pour utiliser le framework.
 
+### UC-00 : Initialisation (Nouveau Projet)
+**Acteurs** : Auteur
+**But** : Préparer l'environnement de travail.
+
+1.  **Ouvrir** le terminal.
+2.  **Exécuter** : `python manage.py init`
+3.  **Vérifier** que `00_SPECS` contient bien les templates copiés.
+
 ### UC-01 : Conception (Phase Spec-First)
 **Acteurs** : Architecte + Critique
 **But** : Définir les fondations AVANT de construire.
 
 1.  **Naviguer** vers `00_SPECS/`.
-2.  **Remplir** les 3 templates fondamentaux :
+2.  **Remplir** les fichiers générés lors de l'initialisation :
     *   `01_concept.md` : La graine (Genre, Thème, Règles).
     *   `02_casting.md` : Les acteurs (Ghost, Lie, Truth).
-    *   `03_story_design.md` : Le plan (15 Beats Save The Cat).
+    *   `03_story_design.md` (à créer) : Le plan (15 Beats Save The Cat).
 3.  **Vérifier** la cohérence : Le Critique doit valider que le *Casting* peut porter le *Design*.
 
 ### UC-02 : Créer une Entité (Personnage/Lieu)
@@ -79,25 +90,26 @@ Voici les procédures standard pour utiliser le framework.
     *   `conflict` : Quel est l'obstacle ?
 
 ### UC-04 : Générer un Draft (Build)
-**Acteur** : Système (via commande)
-**But** : Transformer la Spec en Texte.
+**Acteur** : Système (via CLI)
+**But** : Assembler le contexte pour préparer l'écriture.
 
-1.  **Ouvrir** le terminal dans VS Code.
-2.  **Exécuter** la commande de build :
+1.  **Exécuter** la commande d'assemblage :
     ```bash
-    python _SYSTEM/automation/build_chapter.py ch01
+    python manage.py assemble 02_STRUCTURE/specs_json/ch01_spec.json -o 05_BUILD/logs/prompt_ch01.txt
     ```
-3.  **Consulter** le résultat dans `03_MANUSCRIPT/01_drafts/`.
+2.  **Utiliser** le prompt généré avec votre LLM préféré (ou via l'agent Draft).
+3.  **Sauvegarder** le résultat dans `03_MANUSCRIPT/01_drafts/ch01.md`.
 
 ### UC-05 : Valider la Qualité (Test)
 **Acteur** : Système (Automatique)
 **But** : Vérifier que le texte respecte les règles.
 
-1.  Le script de build lance automatiquement `test_runner.py`.
-2.  **Ouvrir** le rapport généré dans `05_BUILD/logs/`.
-3.  **Analyser** les scores :
-    *   *Linting* : Avez-vous trop d'adverbes ?
-    *   *Structure* : Le conflit est-il présent ?
+1.  **Exécuter** le linter sur votre draft :
+    ```bash
+    python manage.py lint 03_MANUSCRIPT/01_drafts/ch01.md
+    ```
+2.  **Analyser** le rapport immédiat dans le terminal.
+3.  **Corriger** si le score est insuffisant (< 0.8).
 
 ---
 

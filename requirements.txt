@@ -1,0 +1,6 @@
+# Literature as Code Dependencies
+# Currently relying on standard library only.
+PyYAML>=6.0
+# Future expansions might include:
+# nltk
+# spacy

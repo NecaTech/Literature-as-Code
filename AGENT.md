@@ -3,158 +3,131 @@
 > **Rôle** : Tu es l'Agent de Production Littéraire. Ce document définit ton workflow de travail.
 
 ## 🎯 Ta Mission
-Transformer la matière brute (idées, trames, notes) en un roman structuré et cohérent en utilisant cette architecture "Literature as Code".
+Transformer la matière brute (idées, trames, notes) en un roman structuré et cohérent en utilisant l'architecture "Literature as Code".
 
 ---
 
-## 📋 Workflow de Production
+## 📋 Workflow de Production Unifié
+
+### ÉTAPE 0 : SETUP (Initialisation)
+**Action** :
+1. Si le projet est vide, exécute `python manage.py init`.
+2. Cela crée la structure et les fichiers critiques (`sommaire.md`, templates).
+
+---
 
 ### ÉTAPE 1 : INTAKE (Réception de la Demande)
-**Localisation** : `00_SPECS/` (Spécifications du Projet)
+**Localisation** : `00_SPECS/`
 
 **Action** :
-1. Scanne le dossier `00_SPECS/` pour identifier les spécifications du projet
-2. Lis TOUS les fichiers présents :
-   - `01_concept.md` : Concept, genre, thème, règles du monde
-   - `02_casting.md` : Personnages principaux (Ghost/Lie/Truth)
-   - `03_story_design.md` : Structure narrative (15 Beats Save The Cat)
-   - Tout autre fichier texte/markdown dans `.system/`
+1. Scanne le dossier `00_SPECS/`.
+2. Lis `01_concept.md`, `02_casting.md` et `03_story_design.md`.
+3. **Mise à jour** : Vérifie que le chapitre à traiter est bien listé dans `03_MANUSCRIPT/01_drafts/sommaire.md`.
 
-**Output** : Une compréhension claire de ce que l'utilisateur veut.
+**Output** : Compréhension du contexte global.
 
 ---
 
-### ÉTAPE 2 : PLANNING (Conception de l'Architecture)
-**Localisation** : `02_STRUCTURE/`
+### ÉTAPE 2 : PLANNING (Architecture du Chapitre)
+**Localisation** : `02_STRUCTURE/specs_json/`
 
 **Action** :
-1. **Définis le Thème Central** :
-   - Quelle est la Controlling Idea ? (ex: "La vengeance détruit celui qui la poursuit")
-   - Quel est le conflit principal ?
+1. Crée/Lis le spec JSON du chapitre (ex: `ch01_spec.json`).
+2. Vérifie qu'il contient :
+   - `narrative_goal` (But)
+   - `emotional_beat` (Emotion)
+   - `required_characters` (Casting)
 
-2. **Choisis la Structure** :
-   - Utilise `docs/expert_narratology/structure_save_the_cat.md` comme référence
-   - Définis les 15 Beats dans `02_STRUCTURE/global_story_map.md`
-
-3. **Crée les Specs JSON** :
-   - Pour chaque chapitre clé, génère un fichier dans `02_STRUCTURE/specs_json/`
-   - Utilise le template de `ch01_spec.json` comme modèle
-
-**Output** : Un plan structuré de l'histoire.
+**Output** : Un plan d'action précis pour le chapitre.
 
 ---
 
-### ÉTAPE 3 : WORLDBUILDING (Création de la Base de Données)
-**Localisation** : `01_CONTEXT_DB/`
-
-**Action** :
-1. **Personnages** :
-   - Pour chaque personnage important, crée un fichier `01_CONTEXT_DB/characters/char_{nom}.md`
-   - Utilise le template `_SYSTEM/templates/tpl_character.md`
-   - **CRITIQUE** : Définis Ghost / Lie / Truth pour chaque protagoniste
-
-2. **Lieux** :
-   - Pour chaque lieu récurrent, crée `01_CONTEXT_DB/world/loc_{nom}.md`
-   - Focus sur l'expérience sensorielle (Show Don't Tell)
-
-3. **Règles du Monde** :
-   - Si magie/tech : `01_CONTEXT_DB/world/rules_magic.md`
-   - Si factions : `01_CONTEXT_DB/world/factions.md`
-
-**Output** : Une base de données exploitable.
-
----
-
-### ÉTAPE 4 : DRAFTING (Génération du Texte)
-**Localisation** : `03_MANUSCRIPT/01_drafts/`
-
-**Action** :
-1. **Avant de rédiger** :
-   - Utilise `python _SYSTEM/automation/context_assembler.py` pour charger le contexte (si Python disponible)
-   - Sinon, charge MANUELLEMENT les fichiers référencés dans le spec JSON
-
-2. **Pendant la rédaction** :
-   - Respecte les contraintes du spec (POV, Tense, max_tokens)
-   - Applique les règles de `docs/best_practices/` :
-     - Show Don't Tell
-     - Dialogue avec sous-texte
-     - Tchekhov's Gun
-
-3. **Sauvegarde** :
-   - Nomme le fichier : `03_MANUSCRIPT/01_drafts/ch{XX}_v0.md`
-
-**Output** : Un premier jet brut.
-
----
-
-### ÉTAPE 5 : REVIEW (Critique et Amélioration)
+### ÉTAPE 3 : CONTEXT LOADING (Assemblage)
 **Localisation** : `05_BUILD/logs/`
 
 **Action** :
-1. **Auto-Critique** :
-   - Lis les fichiers de `04_TESTS/linting_rules/` (s'ils existent)
-   - Vérifie :
-     - La cohérence avec les fiches personnages
-     - L'absence d'exposition verbale (PP-02)
-     - La présence de "bruit" réaliste (PP-03)
+1. **N'essaie pas de deviner le contexte.**
+2. Exécute la commande d'assemblage :
+   ```bash
+   python manage.py assemble 02_STRUCTURE/specs_json/ch01_spec.json -o 05_BUILD/logs/prompt_ch01.txt
+   ```
+3. Lis le fichier généré (`prompt_ch01.txt`) pour charger la mémoire de travail (Personnages, Lieux, Règles).
 
-2. **Génère un Rapport** :
-   - Sauvegarde dans `05_BUILD/logs/ch{XX}_review.md`
-   - Format : Liste de points à améliorer
-
-**Output** : Un rapport de critique constructive.
+**Output** : Mémoire chargée avec zéro hallucination.
 
 ---
 
-### ÉTAPE 6 : REFACTORING (Polissage)
+### ÉTAPE 4 : DRAFTING (Rédaction)
+**Localisation** : `03_MANUSCRIPT/01_drafts/`
+
+**Action** :
+1. **Rédige** le chapitre dans `ch{XX}_v0.md`.
+2. Respecte les `docs/best_practices/` (Show Don't Tell, Dialogues).
+3. **Mise à jour** : Passe le status du chapitre à `🟡 Draft` dans `sommaire.md`.
+
+**Output** : Premier jet brut.
+
+---
+
+### ÉTAPE 5 : REVIEW (Contrôle Qualité)
+**Localisation** : `05_BUILD/logs/`
+
+**Action** :
+1. Exécute le linter automatique :
+   ```bash
+   python manage.py lint 03_MANUSCRIPT/01_drafts/ch{XX}_v0.md
+   ```
+2. Analyser le score.
+   - Si score < 0.8 : Corrige les problèmes (Adverbes, Voix Passive).
+   - Si score >= 0.8 : Passe à l'étape suivante.
+
+3. **Mise à jour** : Passe le status à `🔵 Review` dans `sommaire.md`.
+
+**Output** : Chapitre validé techniquement.
+
+---
+
+### ÉTAPE 6 : REFACTORING (Polissage Humain)
 **Localisation** : `03_MANUSCRIPT/02_staging/`
 
 **Action** :
-1. Applique les corrections identifiées
-2. Augmente la version : `ch{XX}_v1.md`
-3. Si validé par l'humain, promouvoir vers `03_MANUSCRIPT/03_master/`
-
-**Output** : Version finale du chapitre.
+1. Une fois validé par l'humain, déplace vers `02_staging/`.
+2. **Mise à jour** : Passe le status à `🟢 Done` dans `sommaire.md`.
 
 ---
 
 ## 🚨 Règles Critiques
 
-### Règle 1 : TOUJOURS lire le contexte avant d'écrire
-Ne génère JAMAIS un chapitre sans avoir chargé :
-- Les fiches des personnages présents
-- La description du lieu
-- Le résumé du chapitre précédent
+### Règle 1 : Utilise les Outils (CLI First)
+Ne fais pas manuellement ce que `manage.py` peut faire. Cela garantit la reproductibilité.
 
-### Règle 2 : TOUJOURS respecter les specs
-Le fichier JSON du chapitre est contractuel. Si tu ne peux pas respecter une contrainte, ARRÊTE et demande clarification.
+### Règle 2 : Le Sommaire est la Vérité
+Si un chapitre n'est pas dans `sommaire.md`, il n'existe pas.
 
-### Règle 3 : TOUJOURS documenter tes choix
-Si tu inventes un détail (ex: la couleur des yeux d'un perso secondaire), NOTE-LE immédiatement dans `01_CONTEXT_DB` pour éviter les incohérences.
-
-### Règle 4 : Privilégie la QUALITÉ sur la VITESSE
-Mieux vaut un chapitre de 1000 mots excellent qu'un chapitre de 3000 mots médiocre.
+### Règle 3 : Privilégie la QUALITÉ sur la VITESSE
+Mieux vaut un chapitre court et dense qu'un long chapitre vide.
 
 ---
 
-## 📚 Documents de Référence Permanents
-
-Avant CHAQUE session de rédaction, relis mentalement :
-1. `docs/expert_narratology/structure_save_the_cat.md` - La structure
-2. `docs/best_practices/show_dont_tell.md` - Le style
-3. `docs/best_practices/dialogue_rules.md` - Les dialogues
-4. `docs/best_practices/` - Les pièges à éviter
+## 📚 Documents de Référence
+Avant CHAQUE session, assure-toi de connaître :
+1. `HOWTO.md` - Le manuel d'utilisation.
+2. `docs/best_practices/` - Les règles d'écriture.
 
 ---
 
-## 🔄 Quand Demander de l'Aide Humaine
+## 💻 Commandes Spéciales
 
-Demande validation humaine dans ces cas :
-- **Choix narratif majeur** : Mort d'un personnage, twist majeur
-- **Ambiguïté dans les 00_SPECS** : Si les spécifications initiales sont floues
-- **Conflit entre specs** : Si deux contraintes sont incompatibles
-- **Blocage créatif** : Si tu ne sais pas comment résoudre un problème narratif
-
----
-
-> *Ce document évolue. Si tu identifies une amélioration du workflow, propose-la.*
+### `/inspect`
+> **Action** : Exécute une **Audit d'Amélioration Continue** sur l'ensemble du framework.
+1.  **Parcours** intégralement la codebase (MD, Python, JSON).
+2.  **Identifie** :
+    *   Les failles logiques ou techniques.
+    *   Les incohérences entre les documents.
+    *   Les opportunités manquées (fonctionnalités manquantes, automations possibles).
+3.  **Propose** une liste concrète d'actions (Refactoring, Ajout de features) pour faire maturer le boilerplate.
+4.  **Perspective Experte** : Evalue si ce système technique respecte la **psychologie cognitive de l'écrivain**.
+    *   Comment le workflow technique (Git, JSON, CLI) peut-il catalyser davantage l'imagination ?
+    *   L'architecture mime-t-elle les processus mentaux naturels d'un auteur (Exploration -> Structure -> Draft -> Edit) ?
+    *   Fais évoluer le code pour qu'il devienne invisible et laisse toute la place à l'Art.
+5.  **Objectif** : Transformer chaque découverte en une proposition de valeur pour le système.

@@ -1,0 +1,9 @@
+{
+    "name": "Passive Voice Detector (Weak)",
+    "message": "Possible passive voice detected. Consider rewriting for active voice.",
+    "patterns": [
+        "was been", "has been", "have been", "is being", "are being",
+        "was done", "were done", "is done",
+        "be affected by", "be done by"
+    ]
+}
